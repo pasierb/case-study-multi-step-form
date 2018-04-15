@@ -1,4 +1,5 @@
 export const UNINITIALIZED = 'uninitialized';
+export const LOADING = 'loading';
 export const TRIP_SELECTION = 'tripSelection';
 export const EXTRAS_SELECTION = 'extrasSelection';
 export const SEAT_RESERVATION = 'seatReservation';

@@ -1,12 +1,10 @@
 <template>
 <div>
-  Extras selection
-
   <form class="form" @submit.prevent="onSubmit">
-    <div class="field" v-for="(extra, i) in extras" :key="i">
+    <div class="field" v-for="insurance in insurances" :key="insurance.name">
       <label class="checkbox">
         <input type="checkbox">
-        {{extra.name}}
+        {{insurance.name}}
       </label>
     </div>
 
@@ -16,7 +14,6 @@
       </div>
     </div>
   </form>
-
 </div>  
 </template>
 
@@ -27,13 +24,11 @@ export default {
   },
   data() {
     return {
-      extras: this.fsm.data.extras
+      insurances: this.fsm.data.insurances
     }
   },
   methods: {
-    onSubmit() {
-      this.$emit('submit');
-    }
+    onSubmit() {}
   }
 }
 </script>
