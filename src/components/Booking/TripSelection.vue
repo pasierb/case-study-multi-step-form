@@ -17,21 +17,23 @@
 </template>
 
 <script>
+import Vuex from 'vuex';
 import {
   SELECT_TRIP
 } from '../../stateMachines/transitions';
 
 export default {
   props: {
-    fsm: { type: Object, required: true }
+    tripId: Number,
+    done: { type: Function, required: true },
+  },
+  computed: {
+    ...Vuex.mapState(['trips'])
   },
   methods: {
     onSubmit(trip) {
-      this.$emit('submit', SELECT_TRIP, { trip });
+      return this.done(SELECT_TRIP, trip);
     }
-  },
-  computed: {
-    trips() { return this.fsm.data.trips; }
   }
 }
 </script>

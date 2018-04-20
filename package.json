@@ -8,7 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "vue": "^2.5.13"
+    "vue": "^2.5.13",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.6",
@@ -17,6 +18,7 @@
     "bulma": "^0.7.0",
     "machina": "^2.0.2",
     "node-sass": "^4.8.3",
+    "ramda": "^0.25.0",
     "sass-loader": "^7.0.1",
     "vue-template-compiler": "^2.5.13"
   },

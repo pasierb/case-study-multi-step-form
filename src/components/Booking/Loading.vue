@@ -11,9 +11,6 @@
 
 <script>
 export default {
-  props: {
-    fsm: { type: Object, required: true }
-  }
 };
 </script>
 

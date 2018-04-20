@@ -1,17 +1,20 @@
 const trips = [
   {
+    id: 1,
     departure: 'Zurich',
     destination: 'Wroclaw',
     airlines: 'Swiss',
     price: 300
   },
   {
+    id: 2,
     departure: 'Zurich',
     destination: 'Wroclaw',
     airlines: 'Luftwaffe',
     price: 350
   },
   {
+    id: 3,
     departure: 'Zurich',
     destination: 'Wroclaw',
     airlines: 'PL Lot',
@@ -20,17 +23,15 @@ const trips = [
 ]
 
 const extras = [
-  { name: 'Drinks', price: 30 },
-  { name: 'Less crapy movies', price: 15 },
-  { name: 'No children in 3 seats proximity', price: 120 }
+  { id: 1, name: 'Drinks', price: 30 },
+  { id: 2, name: 'Less crapy movies', price: 15 },
+  { id: 3, name: 'No children in 3 seats proximity', price: 120 }
 ];
-
-const insurances = [];
 
 export function fetchData() {
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve({ trips, extras, insurances });
+      resolve({ trips, extras });
     }, 2000)
   })
 }

@@ -3,7 +3,6 @@ import {
   UNINITIALIZED,
   TRIP_SELECTION,
   EXTRAS_SELECTION,
-  INSURANCE_SELECTION,
   PERSONAL_INFORMATION,
   RECAP,
   LOADING,
@@ -16,47 +15,55 @@ import {
   BACK,
   RESET,
   PAY,
-  SELECT_TRIP
+  SELECT_TRIP,
+  SELECT_EXTRAS
 } from './transitions';
-import { fetchData, submitPayment } from '../api';
+import store, {
+  FETCH_DATA,
+  ADD_USER_TRIP,
+  SET_USER_TRIP_EXTRAS
+} from '../store';
 
 export default machina.Fsm.extend({
   initialState: UNINITIALIZED,
   initialize() {
-    this.data = {};
+    this.tripId = undefined;
   },
   states: {
     [UNINITIALIZED]: {
       [INITIALIZE]() {
         this.transition(LOADING);
-
-        return fetchData().then(data => {
-          this.data = data;
-          this.transition(TRIP_SELECTION);
-        });
+        store.dispatch(FETCH_DATA).then(this.transition.bind(this, TRIP_SELECTION));
       }
     },
     [LOADING]: {},
     [TRIP_SELECTION]: {
-      [SELECT_TRIP]({ trip }) {
-        this.data.selectedTrip = trip;
-
+      [SELECT_TRIP](trip) {
+        this.tripId = trip.id;
+        store.commit(ADD_USER_TRIP, trip);
         this.transition(EXTRAS_SELECTION);
       }
     },
     [EXTRAS_SELECTION]: {
-      [NEXT]: INSURANCE_SELECTION,
+      [NEXT]: PERSONAL_INFORMATION,
+      [SELECT_EXTRAS](extrasIds) {
+        store.commit(SET_USER_TRIP_EXTRAS, {
+          tripId: this.tripId,
+          extrasIds
+        });
+        this.handle(NEXT);
+      },
       [BACK]: TRIP_SELECTION,
       [RESET]: TRIP_SELECTION
     },
-    [INSURANCE_SELECTION]: {
-      [NEXT]: PERSONAL_INFORMATION,
+    [PERSONAL_INFORMATION]: {
+      [NEXT]: RECAP,
       [BACK]: EXTRAS_SELECTION,
       [RESET]: TRIP_SELECTION
     },
     [RECAP]: {
       [NEXT]: PAYMENT,
-      [BACK]: INSURANCE_SELECTION,
+      [BACK]: PERSONAL_INFORMATION,
       [RESET]: TRIP_SELECTION
     },
     [PAYMENT]: {

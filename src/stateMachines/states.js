@@ -3,7 +3,6 @@ export const LOADING = 'loading';
 export const TRIP_SELECTION = 'tripSelection';
 export const EXTRAS_SELECTION = 'extrasSelection';
 export const SEAT_RESERVATION = 'seatReservation';
-export const INSURANCE_SELECTION = 'insuranceSelection';
 export const PERSONAL_INFORMATION = 'personalInformation';
 export const RECAP = 'recap';
 export const PAYMENT = 'payment';

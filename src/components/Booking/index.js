@@ -6,19 +6,26 @@ import {
 import {
   TRIP_SELECTION,
   EXTRAS_SELECTION,
-  INSURANCE_SELECTION,
+  PERSONAL_INFORMATION,
+  RECAP,
+  PAYMENT,
   LOADING
 } from '../../stateMachines/states';
+
 import TripSelection from './TripSelection.vue';
 import ExtrasSelection from './ExtrasSelection.vue';
-import InsuranceSelection from './InsuranceSelection.vue';
+import PersonalInformation from './PersonalInformation.vue';
 import Loading from './Loading.vue';
+import Recap from './Recap.vue';
+import Payment from './Payment.vue';
 
 const stateComponents = {
   [TRIP_SELECTION]: TripSelection,
   [EXTRAS_SELECTION]: ExtrasSelection,
-  [INSURANCE_SELECTION]: InsuranceSelection,
-  [LOADING]: Loading
+  [PERSONAL_INFORMATION]: PersonalInformation,
+  [LOADING]: Loading,
+  [RECAP]: Recap,
+  [PAYMENT]: Payment
 };
 
 export default {
@@ -32,7 +39,7 @@ export default {
     this.fsm.handle(INITIALIZE);
   },
   methods: {
-    onSubmit() {
+    onDone() {
       const [transition, ...params] = arguments;
 
       this.fsm.handle(transition || NEXT, ...params);
@@ -43,10 +50,8 @@ export default {
 
     return  h(stateComponents[vm.fsm.state], {
       props: {
-        fsm: vm.fsm
-      },
-      on: {
-        submit: vm.onSubmit
+        done: vm.onDone,
+        tripId: vm.fsm.tripId
       }
     });
   }
