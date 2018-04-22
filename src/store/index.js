@@ -7,7 +7,7 @@ Vue.use(Vuex);
 const initialState = {
     extras: [],
     trips: [],
-    userTripsById: {},
+    selectedExtrasIdsByTripId: {},
     userInfo: {
         firstName: undefined,
         lastName: undefined
@@ -27,7 +27,7 @@ const actions = {
 export const SET_TRIPS = 'SET_TRIPS';
 export const SET_EXTRAS = 'SET_EXTRAS';
 export const ADD_USER_TRIP = 'ADD_USER_TRIP';
-export const SET_USER_TRIP_EXTRAS = 'SET_USER_TRIP_EXTRAS';
+export const SET_TRIP_EXTRAS = 'SET_USER_TRIP_EXTRAS';
 export const SET_USER_INFO = 'SET_USER_INFO';
 const mutations = {
     [SET_TRIPS](state, trips) {
@@ -36,22 +36,26 @@ const mutations = {
     [SET_EXTRAS](state, extras) {
         state.extras = extras;
     },
-    [ADD_USER_TRIP](state, trip) {
-        if (!state.userTripsById[trip.id]) {
-            state.userTripsById[trip.id] = {
-                extrasIds: []
-            }
-        }
-    },
-    [SET_USER_TRIP_EXTRAS](state, { tripId, extrasIds }) {
-        state.userTripsById[tripId].extrasIds = extrasIds;
+    [SET_TRIP_EXTRAS](state, { tripId, extrasIds }) {
+        state.selectedExtrasIdsByTripId[tripId] = extrasIds;
     },
     [SET_USER_INFO](state, { firstName, lastName }) {
         Object.assign(state.userInfo, { firstName, lastName });
     }
 };
 
-const getters = {};
+const getters = {
+    tripsById(state) {
+        return state.trips.reduce((acc, trip) => {
+            return Object.assign(acc, { [trip.id]: trip });
+        }, {});
+    },
+    extrasById(state) {
+        return state.extras.reduce((acc, extra) => {
+            return Object.assign(acc, { [extra.id]: extra });
+        }, {});
+    }
+};
 
 export default new Vuex.Store({
     state: initialState,

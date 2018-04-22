@@ -17,23 +17,16 @@
 </template>
 
 <script>
-import Vuex from 'vuex';
+import { NEXT } from '../../stateMachines/transitions';
 
 export default {
     props: {
-        done: { type: Function, required: true }
-    },
-    mounted() {
-        this.info
-    },
-    computed: {
-        ...Vuex.mapState({
-            userInfo: 'userInfo'
-        })
+        done: { type: Function, required: true },
+        userInfo: { type: Object, default: () => ({}) }
     },
     methods: {
         onSubmit() {
-            return this.done();
+            return this.done(NEXT, this.userInfo);
         }
     }
 }

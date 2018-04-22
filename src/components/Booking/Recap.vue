@@ -1,6 +1,6 @@
 <template>
 <div>
-    Recap
+    Recap {{selectedTrip}}
 
     <a @click.prevent="onNext">OK</a>
 </div>
@@ -9,7 +9,9 @@
 <script>
 export default {
     props: {
-        done: { type: Function, required: true }
+        done: { type: Function, required: true },
+        selectedTrip: { type: Object, required: true },
+        selectedExtras: { type: Array, default: () => [] }
     },
     methods: {
         onNext() {

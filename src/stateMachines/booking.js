@@ -20,8 +20,8 @@ import {
 } from './transitions';
 import store, {
   FETCH_DATA,
-  ADD_USER_TRIP,
-  SET_USER_TRIP_EXTRAS
+  SET_TRIP_EXTRAS,
+  SET_USER_INFO
 } from '../store';
 
 export default machina.Fsm.extend({
@@ -40,14 +40,13 @@ export default machina.Fsm.extend({
     [TRIP_SELECTION]: {
       [SELECT_TRIP](trip) {
         this.tripId = trip.id;
-        store.commit(ADD_USER_TRIP, trip);
         this.transition(EXTRAS_SELECTION);
       }
     },
     [EXTRAS_SELECTION]: {
       [NEXT]: PERSONAL_INFORMATION,
       [SELECT_EXTRAS](extrasIds) {
-        store.commit(SET_USER_TRIP_EXTRAS, {
+        store.commit(SET_TRIP_EXTRAS, {
           tripId: this.tripId,
           extrasIds
         });
@@ -57,7 +56,10 @@ export default machina.Fsm.extend({
       [RESET]: TRIP_SELECTION
     },
     [PERSONAL_INFORMATION]: {
-      [NEXT]: RECAP,
+      [NEXT](data) {
+        store.commit(SET_USER_INFO, data);
+        this.transition(RECAP);
+      },
       [BACK]: EXTRAS_SELECTION,
       [RESET]: TRIP_SELECTION
     },
@@ -70,9 +72,9 @@ export default machina.Fsm.extend({
       [RESET]: TRIP_SELECTION,
       [BACK]: RECAP,
       [PAY]() {
-        return submitPayment().then(() => {
-          this.transition(CONFIRMATION);
-        });
+        // return submitPayment().then(() => {
+        //   this.transition(CONFIRMATION);
+        // });
       }
     },
     [CONFIRMATION]: {}

@@ -1,3 +1,5 @@
+import Vuex from 'vuex';
+import { pick, values } from 'ramda';
 import BookingFSM from '../../stateMachines/booking';
 import {
   INITIALIZE,
@@ -45,13 +47,34 @@ export default {
       this.fsm.handle(transition || NEXT, ...params);
     }
   },
+  computed: {
+    ...Vuex.mapState({
+      trips: 'trips',
+      extras: 'extras',
+      userInfo: 'userInfo',
+      selectedTrip(state, getters) {
+        return getters.tripsById[this.fsm.tripId];
+      },
+      selectedExtras(state, getters) {
+        return values(pick(
+          state.selectedExtrasIdsByTripId[this.fsm.tripId] || [],
+          getters.extrasById
+        ));
+      }
+    })
+  },
   render(h) {
     const vm = this;
 
     return  h(stateComponents[vm.fsm.state], {
       props: {
         done: vm.onDone,
-        tripId: vm.fsm.tripId
+        tripId: vm.fsm.tripId,
+        trips: vm.trips,
+        extras: vm.extras,
+        userInfo: vm.userInfo,
+        selectedTrip: vm.selectedTrip,
+        selectedExtras: vm.selectedExtras
       }
     });
   }

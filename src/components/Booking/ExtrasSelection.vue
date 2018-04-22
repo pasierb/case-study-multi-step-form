@@ -24,32 +24,19 @@
 </template>
 
 <script>
-import Vuex from 'vuex';
 import { filter } from 'ramda';
 import { SELECT_EXTRAS } from '../../stateMachines/transitions';
 
 export default {
   props: {
     tripId: { type: Number, required: true },
+    extras: { type: Array, default: () => [] },
     done: { type: Function, required: true }
   },
   data() {
     return {
       selectedExtrasById: {}
     }
-  },
-  mounted() {
-    this.selectedExtrasById = this.selectedIds.reduce((acc, id) => {
-      return Object.assign(acc, { [id]: true });
-    }, {});
-  },
-  computed: {
-    ...Vuex.mapState({
-      extras: 'extras',
-      selectedIds: function(state) {
-        return state.userTripsById[this.tripId].extrasIds || [];
-      }
-    })
   },
   methods: {
     onSkip() {

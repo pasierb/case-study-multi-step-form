@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import Vuex from 'vuex';
 import {
   SELECT_TRIP
 } from '../../stateMachines/transitions';
@@ -25,10 +24,8 @@ import {
 export default {
   props: {
     tripId: Number,
+    trips: { type: Array, required: true },
     done: { type: Function, required: true },
-  },
-  computed: {
-    ...Vuex.mapState(['trips'])
   },
   methods: {
     onSubmit(trip) {
@@ -37,10 +34,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .card {
-    margin-bottom: 10px;
-  }
-</style>
-
