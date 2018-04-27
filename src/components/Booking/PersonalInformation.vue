@@ -2,9 +2,15 @@
 <div>
     <form @submit.prevent="onSubmit">
         <div class="field">
-            <label class="label" for="firstName">Name</label>
+            <label class="label" for="firstName">Firstname:</label>
             <div class="control">
                 <input class="input" name="firstName" v-model="userInfo.firstName" type="text" />
+            </div>
+        </div>
+        <div class="field">
+            <label class="label" for="lastName">Lastname:</label>
+            <div class="control">
+                <input class="input" name="lastName" v-model="userInfo.lastName" type="text" />
             </div>
         </div>
         <div class="field is-grouped">
@@ -17,16 +23,16 @@
 </template>
 
 <script>
-import { NEXT } from '../../stateMachines/transitions';
+import { SET_USER_INFO } from '../../stateMachines/transitions';
 
 export default {
     props: {
         done: { type: Function, required: true },
-        userInfo: { type: Object, default: () => ({}) }
+        userInfo: { type: Object, required: true }
     },
     methods: {
         onSubmit() {
-            return this.done(NEXT, this.userInfo);
+            return this.done(SET_USER_INFO, this.userInfo);
         }
     }
 }

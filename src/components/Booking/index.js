@@ -6,28 +6,28 @@ import {
   NEXT
 } from '../../stateMachines/transitions';
 import {
-  TRIP_SELECTION,
+  UNINITIALIZED,
   EXTRAS_SELECTION,
+  PAYMENT,
   PERSONAL_INFORMATION,
   RECAP,
-  PAYMENT,
-  LOADING
+  TRIP_SELECTION,
 } from '../../stateMachines/states';
 
-import TripSelection from './TripSelection.vue';
 import ExtrasSelection from './ExtrasSelection.vue';
-import PersonalInformation from './PersonalInformation.vue';
 import Loading from './Loading.vue';
-import Recap from './Recap.vue';
 import Payment from './Payment.vue';
+import PersonalInformation from './PersonalInformation.vue';
+import Recap from './Recap.vue';
+import TripSelection from './TripSelection.vue';
 
 const stateComponents = {
-  [TRIP_SELECTION]: TripSelection,
   [EXTRAS_SELECTION]: ExtrasSelection,
+  [UNINITIALIZED]: Loading,
+  [PAYMENT]: Payment,
   [PERSONAL_INFORMATION]: PersonalInformation,
-  [LOADING]: Loading,
   [RECAP]: Recap,
-  [PAYMENT]: Payment
+  [TRIP_SELECTION]: TripSelection,
 };
 
 export default {
@@ -44,7 +44,7 @@ export default {
     onDone() {
       const [transition, ...params] = arguments;
 
-      this.fsm.handle(transition || NEXT, ...params);
+      return this.fsm.handle(transition || NEXT, ...params);
     }
   },
   computed: {
@@ -60,8 +60,15 @@ export default {
           state.selectedExtrasIdsByTripId[this.fsm.tripId] || [],
           getters.extrasById
         ));
-      }
-    })
+      },
+    }),
+    totalPrice() {
+      if (!this.selectedTrip) return null;
+
+      return this.selectedExtras.reduce((sum, extra) => (
+        sum + extra.price
+      ), this.selectedTrip.price);
+    }
   },
   render(h) {
     const vm = this;
@@ -69,12 +76,11 @@ export default {
     return  h(stateComponents[vm.fsm.state], {
       props: {
         done: vm.onDone,
-        tripId: vm.fsm.tripId,
-        trips: vm.trips,
         extras: vm.extras,
-        userInfo: vm.userInfo,
+        selectedExtras: vm.selectedExtras,
         selectedTrip: vm.selectedTrip,
-        selectedExtras: vm.selectedExtras
+        trips: vm.trips,
+        userInfo: vm.userInfo,
       }
     });
   }

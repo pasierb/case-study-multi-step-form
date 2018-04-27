@@ -7,13 +7,14 @@
 </template>
 
 <script>
+import { PAY } from '../../stateMachines/transitions';
 export default {
     props: {
         done: { type: Function, required: true }
     },
     methods: {
         onSubmit() {
-            return this.done();
+            return this.done(PAY);
         }
     }
 }

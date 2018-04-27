@@ -1,9 +1,9 @@
-export const UNINITIALIZED = 'uninitialized';
-export const LOADING = 'loading';
-export const TRIP_SELECTION = 'tripSelection';
+export const CONFIRMATION = 'confirmation';
 export const EXTRAS_SELECTION = 'extrasSelection';
-export const SEAT_RESERVATION = 'seatReservation';
+export const LOADING = 'loading';
+export const PAYMENT = 'payment';
 export const PERSONAL_INFORMATION = 'personalInformation';
 export const RECAP = 'recap';
-export const PAYMENT = 'payment';
-export const CONFIRMATION = 'confirmation';
+export const SEAT_RESERVATION = 'seatReservation';
+export const TRIP_SELECTION = 'tripSelection';
+export const UNINITIALIZED = 'uninitialized';

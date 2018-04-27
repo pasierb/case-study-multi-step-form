@@ -5,77 +5,97 @@ import {
   EXTRAS_SELECTION,
   PERSONAL_INFORMATION,
   RECAP,
-  LOADING,
   PAYMENT,
   CONFIRMATION
 } from './states';
 import {
+  BACK,
+  BOOK_NOW,
   INITIALIZE,
   NEXT,
-  BACK,
-  RESET,
   PAY,
+  SELECT_EXTRAS,
   SELECT_TRIP,
-  SELECT_EXTRAS
+  ACCEPT_PAYMENT,
+  REJECT_PAYMENT,
+  LIST_TRIPS,
+  LOAD_TRIPS,
+  RECEIVE_TRIPS,
 } from './transitions';
+import { PROCESSING_PAYMENT, PAYMENT_FAILED, PAYMENT_SUCCEDED } from './events';
 import store, {
   FETCH_DATA,
   SET_TRIP_EXTRAS,
-  SET_USER_INFO
+  SET_USER_INFO,
+  SUBMIT_TRIP_PAYMENT,
 } from '../store';
+
 
 export default machina.Fsm.extend({
   initialState: UNINITIALIZED,
-  initialize() {
+  reset() {
     this.tripId = undefined;
+    this.transition(TRIP_SELECTION);
   },
   states: {
     [UNINITIALIZED]: {
-      [INITIALIZE]() {
-        this.transition(LOADING);
-        store.dispatch(FETCH_DATA).then(this.transition.bind(this, TRIP_SELECTION));
+      [LOAD_TRIPS]() {
+        return store.dispatch(FETCH_DATA).then(this.handle.bind(this, RECEIVE_TRIPS));
+      },
+      [RECEIVE_TRIPS]() {
+        this.handle(this.tripId ? SELECT_TRIP : LIST_TRIPS);
+      },
+      [SELECT_TRIP]: EXTRAS_SELECTION,
+      [LIST_TRIPS]: TRIP_SELECTION,
+      [INITIALIZE](tripId) {
+        this.tripId = tripId;
+        this.handle(store.state.trips.length ? RECEIVE_TRIPS : LOAD_TRIPS);
       }
     },
-    [LOADING]: {},
     [TRIP_SELECTION]: {
-      [SELECT_TRIP](trip) {
-        this.tripId = trip.id;
+      [SELECT_TRIP]({ tripId }) {
+        this.tripId = tripId;
         this.transition(EXTRAS_SELECTION);
+      },
+      [BOOK_NOW]({ tripId }) {
+        this.tripId = tripId;
+        this.transition(PERSONAL_INFORMATION);
       }
     },
     [EXTRAS_SELECTION]: {
       [NEXT]: PERSONAL_INFORMATION,
-      [SELECT_EXTRAS](extrasIds) {
-        store.commit(SET_TRIP_EXTRAS, {
-          tripId: this.tripId,
-          extrasIds
-        });
+      [SELECT_EXTRAS]({ extrasIds }) {
+        store.commit(SET_TRIP_EXTRAS, { tripId: this.tripId, extrasIds });
         this.handle(NEXT);
       },
       [BACK]: TRIP_SELECTION,
-      [RESET]: TRIP_SELECTION
     },
     [PERSONAL_INFORMATION]: {
-      [NEXT](data) {
+      [SET_USER_INFO](data) {
         store.commit(SET_USER_INFO, data);
-        this.transition(RECAP);
+        this.handle(NEXT);
       },
+      [NEXT]: RECAP,
       [BACK]: EXTRAS_SELECTION,
-      [RESET]: TRIP_SELECTION
     },
     [RECAP]: {
       [NEXT]: PAYMENT,
       [BACK]: PERSONAL_INFORMATION,
-      [RESET]: TRIP_SELECTION
     },
     [PAYMENT]: {
-      [RESET]: TRIP_SELECTION,
       [BACK]: RECAP,
       [PAY]() {
-        // return submitPayment().then(() => {
-        //   this.transition(CONFIRMATION);
-        // });
-      }
+        this.emit(PROCESSING_PAYMENT);
+        return store.dispatch(SUBMIT_TRIP_PAYMENT, this.tripId).then(() => {
+          this.emit(PAYMENT_SUCCEDED);
+          this.handle(ACCEPT_PAYMENT);
+        }).catch(err => {
+          this.emit(PAYMENT_FAILED, err);
+          this.handle(REJECT_PAYMENT);
+        });
+      },
+      [ACCEPT_PAYMENT]: CONFIRMATION,
+      [REJECT_PAYMENT]: PAYMENT,
     },
     [CONFIRMATION]: {}
   }

@@ -5,7 +5,7 @@
   <div class="modal-content">
     <section class="section has-background-white">
       <div>
-        <a v-if="canBack" @click="back">Back</a>
+        <a v-if="canBack" @click="back" class="button is-text">Back</a>
         <h2 class="title">{{title}}</h2>
       </div>
 
@@ -22,22 +22,27 @@
 <script>
 import Booking from './index';
 import BookingFSM from '../../stateMachines/booking';
-import { RESET, BACK } from '../../stateMachines/transitions';
+import { BACK, INITIALIZE } from '../../stateMachines/transitions';
 
 export default {
+  props: {
+    tripId: Number
+  },
   data() {
     return {
-      fsm: new BookingFSM(),
+      fsm: undefined,
       isOpen: false
     };
   },
   methods: {
-    open() {
+    open(tripId) {
+      this.fsm = new BookingFSM();
+      this.fsm.handle(INITIALIZE, tripId);
       this.isOpen = true;
     },
     close() {
       this.isOpen = false;
-      this.fsm.handle(RESET);
+      this.fsm.reset();
     },
     back() {
       this.fsm.handle(BACK);
@@ -45,10 +50,10 @@ export default {
   },
   computed: {
     title() {
-      return this.fsm.state;
+      return this.fsm && this.fsm.state;
     },
     canBack() {
-      return this.fsm.states[this.fsm.state][BACK];
+      return this.fsm && this.fsm.states[this.fsm.state][BACK];
     }
   },
   components: {

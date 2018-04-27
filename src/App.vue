@@ -1,28 +1,35 @@
 <template>
   <div id="app">
-    <h1 class="title">Booking</h1>
+    <h1 class="title is-1">Booking</h1>
 
-    <a @click.prevent="openModal">Open</a>
+    <a @click.prevent="openModal()">Open</a>
 
-    <Booking></Booking>
+    <div>
+      <TripListItem v-for="trip in trips" :key="trip.id" v-bind="trip">
+        <a @click.prevent="openModal(trip.id)" class="button is-primary">book</a>
+      </TripListItem>
+    </div>
     <BookingModal ref="modal"></BookingModal>
-
   </div>
 </template>
 
 <script>
-import Booking from './components/Booking'
-import BookingModal from './components/Booking/Modal.vue'
+import Vuex from 'vuex';
+import TripListItem from './components/TripListItem.vue';
+import BookingModal from './components/Booking/Modal.vue';
 
 export default {
   name: 'app',
+  computed: {
+    ...Vuex.mapState(['trips']),
+  },
   methods: {
-    openModal() {
-      this.$refs.modal.open();
+    openModal(tripId) {
+      this.$refs.modal.open(tripId);
     }
   },
   components: {
-    Booking,
+    TripListItem,
     BookingModal
   }
 }

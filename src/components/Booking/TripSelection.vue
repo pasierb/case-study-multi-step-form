@@ -1,36 +1,43 @@
 <template>
 <div>
-  <ul>
-    <li v-for="(trip, i) in trips" :key="i">
-      <div class="card">
-        <div class="card-content">
-          {{ trip.airlines }}
-          {{ trip.price }}
-        </div>
-        <div class="card-footer">
-          <a @click.prevent="onSubmit(trip)" class="card-footer-item">Select</a>
-        </div>
-      </div>
-    </li>
-  </ul>
+  <TripListItem v-for="trip in trips"
+    :key="trip.id"
+    v-bind="trip"
+    @selectExtras="onSubmit"
+    @bookNow="onBookNow"
+    class="trip-list-item">
+    <p>
+      <a @click.prevent="onSubmit(trip.id)" class="button is-link">Select extras</a>
+    </p>
+    <p>
+      <a @click.prevent="onBookNow(trip.id)" class="button is-text">Book now</a>
+    </p>
+  </TripListItem>
 </div>
 </template>
 
 <script>
+import TripListItem from '../TripListItem.vue'
 import {
-  SELECT_TRIP
+  SELECT_TRIP,
+  BOOK_NOW
 } from '../../stateMachines/transitions';
 
 export default {
   props: {
-    tripId: Number,
     trips: { type: Array, required: true },
     done: { type: Function, required: true },
   },
   methods: {
-    onSubmit(trip) {
-      return this.done(SELECT_TRIP, trip);
+    onSubmit(tripId) {
+      return this.done(SELECT_TRIP, { tripId });
+    },
+    onBookNow(tripId) {
+      return this.done(BOOK_NOW, { tripId });
     }
+  },
+  components: {
+    TripListItem,
   }
 }
 </script>
