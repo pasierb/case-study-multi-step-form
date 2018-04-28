@@ -13,6 +13,7 @@ import {
   RECAP,
   TRIP_SELECTION,
 } from '../../stateMachines/states';
+import { TRIP_SET } from '../../stateMachines/events';
 
 import ExtrasSelection from './ExtrasSelection.vue';
 import Loading from './Loading.vue';
@@ -32,13 +33,17 @@ const stateComponents = {
 
 export default {
   props: {
-    fsm: {
-      type: Object,
-      default: () => new BookingFSM()
-    }
+    fsm: { type: Object, required: true }
+  },
+  data() {
+    return {
+      tripId: undefined
+    };
   },
   created() {
-    this.fsm.handle(INITIALIZE);
+    this.fsm.on(TRIP_SET, tripId => {
+      this.tripId = tripId;
+    });
   },
   methods: {
     onDone() {
@@ -53,11 +58,11 @@ export default {
       extras: 'extras',
       userInfo: 'userInfo',
       selectedTrip(state, getters) {
-        return getters.tripsById[this.fsm.tripId];
+        return getters.tripsById[this.tripId];
       },
       selectedExtras(state, getters) {
         return values(pick(
-          state.selectedExtrasIdsByTripId[this.fsm.tripId] || [],
+          state.selectedExtrasIdsByTripId[this.tripId] || [],
           getters.extrasById
         ));
       },

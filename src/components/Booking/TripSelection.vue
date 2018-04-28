@@ -6,12 +6,10 @@
     @selectExtras="onSubmit"
     @bookNow="onBookNow"
     class="trip-list-item">
-    <p>
+    <div class="has-text-right">
       <a @click.prevent="onSubmit(trip.id)" class="button is-link">Select extras</a>
-    </p>
-    <p>
       <a @click.prevent="onBookNow(trip.id)" class="button is-text">Book now</a>
-    </p>
+    </div>
   </TripListItem>
 </div>
 </template>

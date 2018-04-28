@@ -1,13 +1,13 @@
 <template>
-<div class="columns is-mobile trip-list-item">
-  <div class="column is-one-quarter">
-    <img :src="logoUrl" />
+<div class="columns is-mobile is-multiline trip-list-item">
+  <div class="column is-4-mobile is-3-tablet">
+    <img :src="logoUrl" class="image" />
   </div>
-  <div class="column">
+  <div class="column is-8-mobile is-6-tablet">
     <h4 class="title is-4">{{departure}} - {{destination}}</h4>
     {{price}}
   </div>
-  <div class="column has-text-right">
+  <div class="column is-12-mobile is-3-tablet">
     <slot />
   </div>
 </div>

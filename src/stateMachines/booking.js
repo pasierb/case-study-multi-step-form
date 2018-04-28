@@ -22,7 +22,7 @@ import {
   LOAD_TRIPS,
   RECEIVE_TRIPS,
 } from './transitions';
-import { PROCESSING_PAYMENT, PAYMENT_FAILED, PAYMENT_SUCCEDED } from './events';
+import { PROCESSING_PAYMENT, PAYMENT_FAILED, PAYMENT_SUCCEDED, TRIP_SET } from './events';
 import store, {
   FETCH_DATA,
   SET_TRIP_EXTRAS,
@@ -35,7 +35,7 @@ export default machina.Fsm.extend({
   initialState: UNINITIALIZED,
   reset() {
     this.tripId = undefined;
-    this.transition(TRIP_SELECTION);
+    return this.transition(UNINITIALIZED);
   },
   states: {
     [UNINITIALIZED]: {
@@ -49,16 +49,19 @@ export default machina.Fsm.extend({
       [LIST_TRIPS]: TRIP_SELECTION,
       [INITIALIZE](tripId) {
         this.tripId = tripId;
+        this.emit(TRIP_SET, tripId);
         this.handle(store.state.trips.length ? RECEIVE_TRIPS : LOAD_TRIPS);
       }
     },
     [TRIP_SELECTION]: {
       [SELECT_TRIP]({ tripId }) {
         this.tripId = tripId;
+        this.emit(TRIP_SET, tripId);
         this.transition(EXTRAS_SELECTION);
       },
       [BOOK_NOW]({ tripId }) {
         this.tripId = tripId;
+        this.emit(TRIP_SET, tripId);
         this.transition(PERSONAL_INFORMATION);
       }
     },

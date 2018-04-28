@@ -2,17 +2,23 @@
 <div class="modal" :class="{'is-active': isOpen}">
   <div class="modal-background" @click="close"></div>
 
-  <div class="modal-content">
-    <section class="section has-background-white">
+
+  <div class="modal-card">
+    <div class="modal-card-head">
+      <a v-if="canBack" @click="back" class="button is-text">Back</a>
+      <button class="delete" aria-label="close"></button>
+    </div>
+    <div class="modal-card-body">
+      <TripListItem v-bind="selectedTrip" v-if="selectedTrip" />
+
       <div>
-        <a v-if="canBack" @click="back" class="button is-text">Back</a>
         <h2 class="title">{{title}}</h2>
       </div>
 
       <transition name="slide">
         <Booking :fsm="fsm"></Booking> 
       </transition>
-    </section>
+    </div>
   </div>
 
   <button class="modal-close is-large" aria-label="close" @click="close"></button>
@@ -20,9 +26,12 @@
 </template>
 
 <script>
+import Vuex from 'vuex';
 import Booking from './index';
+import TripListItem from '../TripListItem.vue';
 import BookingFSM from '../../stateMachines/booking';
 import { BACK, INITIALIZE } from '../../stateMachines/transitions';
+import { TRIP_SET } from '../../stateMachines/events';
 
 export default {
   props: {
@@ -30,25 +39,35 @@ export default {
   },
   data() {
     return {
-      fsm: undefined,
-      isOpen: false
+      fsm: new BookingFSM(),
+      isOpen: false,
+      selectedTripId: undefined,
     };
+  },
+  created() {
+    this.fsm.on(TRIP_SET, tripId => {
+      this.selectedTripId = tripId;
+    });
   },
   methods: {
     open(tripId) {
-      this.fsm = new BookingFSM();
+      this.fsm.reset();
       this.fsm.handle(INITIALIZE, tripId);
       this.isOpen = true;
     },
     close() {
       this.isOpen = false;
-      this.fsm.reset();
     },
     back() {
       this.fsm.handle(BACK);
     }
   },
   computed: {
+    ...Vuex.mapState({
+      selectedTrip(state, getters) {
+        return getters.tripsById[this.selectedTripId];
+      },
+    }),
     title() {
       return this.fsm && this.fsm.state;
     },
@@ -57,7 +76,8 @@ export default {
     }
   },
   components: {
-    Booking
+    Booking,
+    TripListItem
   }
 }
 </script>
