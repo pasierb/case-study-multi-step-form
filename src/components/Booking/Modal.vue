@@ -5,8 +5,21 @@
 
   <div class="modal-card">
     <div class="modal-card-head">
-      <a v-if="canBack" @click="back" class="button is-text">Back</a>
-      <button class="delete" aria-label="close"></button>
+      <a v-if="canBack" @click="back" class="button is-rounded">
+        <span class="icon">
+          <i class="fa fa-arrow-left"></i>
+        </span>
+        <span>Back</span>
+      </a>
+
+      <p class="modal-card-title"></p>
+
+      <a @click="close" class="button is-rounded">
+        <span class="icon">
+          <i class="fa fa-times"></i>
+        </span>
+        <span>Close</span>
+      </a>
     </div>
     <div class="modal-card-body">
       <TripListItem v-bind="selectedTrip" v-if="selectedTrip" />

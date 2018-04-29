@@ -1,10 +1,6 @@
 import Vuex from 'vuex';
 import { pick, values } from 'ramda';
-import BookingFSM from '../../stateMachines/booking';
-import {
-  INITIALIZE,
-  NEXT
-} from '../../stateMachines/transitions';
+import { NEXT } from '../../stateMachines/transitions';
 import {
   UNINITIALIZED,
   EXTRAS_SELECTION,
@@ -15,12 +11,12 @@ import {
 } from '../../stateMachines/states';
 import { TRIP_SET } from '../../stateMachines/events';
 
-import ExtrasSelection from './ExtrasSelection.vue';
-import Loading from './Loading.vue';
-import Payment from './Payment.vue';
-import PersonalInformation from './PersonalInformation.vue';
-import Recap from './Recap.vue';
-import TripSelection from './TripSelection.vue';
+import ExtrasSelection from './steps/ExtrasSelection.vue';
+import Loading from './steps/Loading.vue';
+import Payment from './steps/Payment.vue';
+import PersonalInformation from './steps/PersonalInformation.vue';
+import Recap from './steps/Recap.vue';
+import TripSelection from './steps/TripSelection.vue';
 
 const stateComponents = {
   [EXTRAS_SELECTION]: ExtrasSelection,
@@ -44,6 +40,10 @@ export default {
     this.fsm.on(TRIP_SET, tripId => {
       this.tripId = tripId;
     });
+
+    /* eslint-disable no-console */
+    this.fsm.on('*', console.log);
+    /* eslint-enable */
   },
   methods: {
     onDone() {

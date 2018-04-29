@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { PAY } from '../../stateMachines/transitions';
+import { PAY } from '../../../stateMachines/transitions';
 export default {
     props: {
         done: { type: Function, required: true }

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import TripListItem from '../TripListItem.vue'
+import TripListItem from '../../TripListItem.vue'
 
 export default {
     props: {

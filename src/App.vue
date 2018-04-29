@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1 class="title is-1">Booking</h1>
+    <h2 class="title is-2">Filghts</h2>
 
     <a @click.prevent="openModal()">Open</a>
 

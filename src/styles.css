@@ -1,0 +1,7 @@
+body {
+  font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+}
+
+body > .hero {
+  background: linear-gradient(to left bottom, rgb(179, 245, 255) 0%, rgb(236, 255, 179) 100%);
+}

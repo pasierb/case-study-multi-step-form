@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import TripListItem from '../TripListItem.vue'
+import TripListItem from '../../TripListItem.vue'
 import {
   SELECT_TRIP,
   BOOK_NOW
-} from '../../stateMachines/transitions';
+} from '../../../stateMachines/transitions';
 
 export default {
   props: {

@@ -23,7 +23,7 @@
 
 <script>
 import { filter } from 'ramda';
-import { SELECT_EXTRAS } from '../../stateMachines/transitions';
+import { SELECT_EXTRAS } from '../../../stateMachines/transitions';
 
 export default {
   props: {

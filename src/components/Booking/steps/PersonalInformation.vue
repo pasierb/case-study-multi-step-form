@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { SET_USER_INFO } from '../../stateMachines/transitions';
+import { SET_USER_INFO } from '../../../stateMachines/transitions';
 
 export default {
     props: {
