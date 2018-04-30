@@ -1,24 +1,30 @@
 const trips = [
   {
     id: 1,
-    departure: 'Zurich',
-    destination: 'Wroclaw',
+    departure: 'ZRH',
+    departureTime: '10:00',
+    destination: 'WRO',
+    landingTime: '11:45',
     airlines: 'Swiss',
     logoUrl: 'https://www.webdesignerdepot.com/cdn-origin/uploads/2009/03/swissair3.gif',
     price: 300
   },
   {
     id: 2,
-    departure: 'Zurich',
-    destination: 'Wroclaw',
+    departure: 'ZRH',
+    departureTime: '10:00',
+    destination: 'WRO',
+    landingTime: '11:45',
     airlines: 'Luftwaffe',
     logoUrl: 'https://www.webdesignerdepot.com/cdn-origin/uploads/2009/03/lufthansa4.gif',
     price: 350
   },
   {
     id: 3,
-    departure: 'Zurich',
-    destination: 'Wroclaw',
+    departure: 'ZRH',
+    departureTime: '10:00',
+    destination: 'WRO',
+    landingTime: '11:45',
     airlines: 'PL Lot',
     logoUrl: 'https://www.webdesignerdepot.com/cdn-origin/uploads/2009/03/lot2.gif',
     price: 900

@@ -29,7 +29,7 @@ export default {
   props: {
     extras: { type: Array, required: true },
     done: { type: Function, required: true },
-    selectedExtras: { type: Array, default: () => [] }
+    selectedExtras: { type: Array, default: () => [] },
   },
   data() {
     return {

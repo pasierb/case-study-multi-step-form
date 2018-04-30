@@ -1,9 +1,8 @@
-export const CONFIRMATION = 'confirmation';
-export const EXTRAS_SELECTION = 'extrasSelection';
-export const LOADING = 'loading';
-export const PAYMENT = 'payment';
-export const PERSONAL_INFORMATION = 'personalInformation';
-export const RECAP = 'recap';
-export const SEAT_RESERVATION = 'seatReservation';
-export const TRIP_SELECTION = 'tripSelection';
-export const UNINITIALIZED = 'uninitialized';
+export const CONFIRMATION = 'CONFIRMATION';
+export const EXTRAS_SELECTION = 'EXTRAS_SELECTION';
+export const LOADING = 'LOADING';
+export const PAYMENT = 'PAYMENT';
+export const PERSONAL_INFORMATION = 'PERSONAL_INFORMATION';
+export const RECAP = 'RECAP';
+export const TRIP_SELECTION = 'TRIP_SELECTION';
+export const UNINITIALIZED = 'UNINITIALIZED';

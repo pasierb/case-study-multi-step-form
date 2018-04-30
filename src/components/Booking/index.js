@@ -84,6 +84,7 @@ export default {
         extras: vm.extras,
         selectedExtras: vm.selectedExtras,
         selectedTrip: vm.selectedTrip,
+        totalPrice: vm.totalPrice,
         trips: vm.trips,
         userInfo: vm.userInfo,
       }

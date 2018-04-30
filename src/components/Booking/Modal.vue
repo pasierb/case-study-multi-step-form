@@ -12,7 +12,7 @@
         <span>Back</span>
       </a>
 
-      <p class="modal-card-title"></p>
+      <p class="modal-card-title">{{title}}</p>
 
       <a @click="close" class="button is-rounded">
         <span class="icon">
@@ -22,14 +22,10 @@
       </a>
     </div>
     <div class="modal-card-body">
-      <TripListItem v-bind="selectedTrip" v-if="selectedTrip" />
-
-      <div>
-        <h2 class="title">{{title}}</h2>
-      </div>
+      <TripListItem v-bind="selectedTrip" v-if="showTripBanner" />
 
       <transition name="slide">
-        <Booking :fsm="fsm"></Booking> 
+        <Booking :fsm="fsm" class="section"></Booking> 
       </transition>
     </div>
   </div>
@@ -45,6 +41,7 @@ import TripListItem from '../TripListItem.vue';
 import BookingFSM from '../../stateMachines/booking';
 import { BACK, INITIALIZE } from '../../stateMachines/transitions';
 import { TRIP_SET } from '../../stateMachines/events';
+import { RECAP } from '../../stateMachines/states';
 
 export default {
   props: {
@@ -86,6 +83,9 @@ export default {
     },
     canBack() {
       return this.fsm && this.fsm.states[this.fsm.state][BACK];
+    },
+    showTripBanner() {
+      return this.selectedTrip && this.fsm.state !== RECAP;
     }
   },
   components: {
