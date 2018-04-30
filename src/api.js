@@ -46,9 +46,7 @@ export function fetchData() {
 }
 
 export function submitPayment() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      Math.random() * 100 < 70 ? resolve() : reject('Payment gateway timeout');
-    }, 1500);
+  return new Promise((resolve) => {
+    setTimeout(resolve, 2000);
   });
 }

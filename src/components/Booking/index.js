@@ -8,6 +8,8 @@ import {
   PERSONAL_INFORMATION,
   RECAP,
   TRIP_SELECTION,
+  LOADING,
+  CONFIRMATION,
 } from '../../stateMachines/states';
 import { TRIP_SET } from '../../stateMachines/events';
 
@@ -17,14 +19,17 @@ import Payment from './steps/Payment.vue';
 import PersonalInformation from './steps/PersonalInformation.vue';
 import Recap from './steps/Recap.vue';
 import TripSelection from './steps/TripSelection.vue';
+import Confirmation from './steps/Confirmation.vue';
 
 const stateComponents = {
   [EXTRAS_SELECTION]: ExtrasSelection,
   [UNINITIALIZED]: Loading,
   [PAYMENT]: Payment,
+  [LOADING]: Loading,
   [PERSONAL_INFORMATION]: PersonalInformation,
   [RECAP]: Recap,
   [TRIP_SELECTION]: TripSelection,
+  [CONFIRMATION]: Confirmation,
 };
 
 export default {

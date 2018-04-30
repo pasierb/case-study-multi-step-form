@@ -6,23 +6,25 @@ import {
   PERSONAL_INFORMATION,
   RECAP,
   PAYMENT,
-  CONFIRMATION
+  CONFIRMATION,
+  LOADING
 } from './states';
 import {
+  ACCEPT_PAYMENT,
   BACK,
   BOOK_NOW,
   INITIALIZE,
-  NEXT,
-  PAY,
-  SELECT_EXTRAS,
-  SELECT_TRIP,
-  ACCEPT_PAYMENT,
-  REJECT_PAYMENT,
   LIST_TRIPS,
   LOAD_TRIPS,
+  LOADING_SUCCESS,
+  NEXT,
+  PAY,
   RECEIVE_TRIPS,
+  REJECT_PAYMENT,
+  SELECT_EXTRAS,
+  SELECT_TRIP,
 } from './transitions';
-import { PROCESSING_PAYMENT, PAYMENT_FAILED, PAYMENT_SUCCEDED, TRIP_SET } from './events';
+import { PROCESSING_PAYMENT, PAYMENT_SUCCEDED, TRIP_SET } from './events';
 import store, {
   FETCH_DATA,
   SET_TRIP_EXTRAS,
@@ -38,6 +40,11 @@ export default machina.Fsm.extend({
     return this.transition(UNINITIALIZED);
   },
   states: {
+    [LOADING]: {
+      [LOADING_SUCCESS](state) {
+        this.transition(state);
+      }
+    },
     [UNINITIALIZED]: {
       [LOAD_TRIPS]() {
         return store.dispatch(FETCH_DATA).then(this.handle.bind(this, RECEIVE_TRIPS));
@@ -89,12 +96,11 @@ export default machina.Fsm.extend({
       [BACK]: RECAP,
       [PAY]() {
         this.emit(PROCESSING_PAYMENT);
+        this.transition(LOADING);
+
         return store.dispatch(SUBMIT_TRIP_PAYMENT, this.tripId).then(() => {
           this.emit(PAYMENT_SUCCEDED);
-          this.handle(ACCEPT_PAYMENT);
-        }).catch(err => {
-          this.emit(PAYMENT_FAILED, err);
-          this.handle(REJECT_PAYMENT);
+          this.handle(LOADING_SUCCESS, CONFIRMATION);
         });
       },
       [ACCEPT_PAYMENT]: CONFIRMATION,

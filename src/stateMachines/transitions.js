@@ -14,3 +14,4 @@ export const LOAD_TRIPS = 'LOAD_TRIPS';
 export const RECEIVE_TRIPS = 'RECEIVE_TRIPS';
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const LIST_TRIPS = 'LIST_TRIPS';
+export const LOADING_SUCCESS = 'LOADING_SUCCESS';
